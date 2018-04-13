@@ -1,0 +1,94 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    {% block head %}
+        <meta charset="utf-8">
+        <title>{% block title %}Lime{% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+        <link rel="shortcut icon" href="{% static 'img/panda.png' %}" type="image/png">
+
+        <!-- Bootstrap4 -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+        <!-- UIkit3 -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.42/css/uikit.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.42/js/uikit.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.42/js/uikit-icons.min.js"></script>
+
+        <!-- Lime -->
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        <script src="{% static 'js/main.js' %}"></script>
+    {% endblock %}
+</head>
+<body>
+{% block body %}
+    {% block navbar %}
+         <nav class="uk-navbar-container" id="navbar" uk-navbar style="height: 50px;">
+            <div class="uk-navbar-left">
+                <ul class="uk-navbar-nav">
+                    <li><a href="{% url 'home' %}"><img id="logo" src="{% static 'img/panda.png' %}" width="50px"></a></li>
+                    <li>
+                        <a class="uk-navbar-toggle" href="#">
+                            <span uk-navbar-toggle-icon></span> <span class="uk-margin-small-left">Меню</span>
+                        </a>
+                        <div class="uk-navbar-dropdown uk-navbar-dropdown-width-2">
+                            <div class="uk-navbar-dropdown-grid uk-child-width-1-2" uk-grid>
+                                <div>
+                                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                                        <li class="uk-active uk-nav-header"><a href="#">Основные данные</a></li>
+                                        <li><a href="#">Страны</a></li>
+                                        <li><a href="#">Аэропорты</a></li>
+                                        <li><a href="#">Самолёты</a></li>
+                                        <li><a href="#">Пилоты</a></li>
+                                        <li><a href="#">Бортпроводники</a></li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <ul class="uk-nav uk-navbar-dropdown-nav">
+                                        <li class="uk-active uk-nav-header"><a href="#">Динамические данные</a></li>
+                                        <li><a href="#">Рейсы</a></li>
+                                        <li><a href="#">Полетные планы</a></li>
+                                        <li class="uk-nav-divider"></li>
+                                        <li class="uk-nav-header">Настройки</li>
+                                        <li><a href="#">О компании</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li><a href="#">Ссылка 1</a></li>
+                    <li><a href="#">Ссылка 2</a></li>
+                    <li><a href="#">Ссылка 3</a></li>
+                    <li><a href="#">Ссылка 4</a></li>
+                </ul>
+            </div>
+            <div class="uk-navbar-right">
+                <ul class="uk-navbar-nav">
+                    {% if user.is_authenticated %}
+                        <li><a href="#">{{ user.username }}</a></li>
+                    {% else %}
+                        <li><a href="#" class="uk-icon-link" uk-icon="icon: sign-in">Войти / Регистрация</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+    {% endblock %}
+
+    {% block content %}
+    {% endblock %}
+
+    {% block footer %}
+        <div class="uk-column-1-4 uk-background-secondary uk-padding-small uk-margin-top" id="footer_links">
+            <p><a href="{% url 'home' %}">О сайте</a></p>
+            <p><a href="{% url 'home' %}">Блог</a></p>
+            <p><a href="{% url 'home' %}">Блог</a></p>
+            <p><a href="{% url 'home' %}">Lime, 2018</a></p>
+        </div>
+    {% endblock %}
+{% endblock %}
+</body>
