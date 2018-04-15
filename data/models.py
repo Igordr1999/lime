@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 choice_type_pilot = (
     ("C", 'КВС'),
@@ -16,6 +17,7 @@ class Country(models.Model):
     name = models.CharField(verbose_name="Название", max_length=100, unique=True)
     flag = models.ImageField(verbose_name="Флаг", upload_to='data/country/',
                              default='data/country/no.jpg')
+    priority = models.BooleanField(verbose_name="Приоритет", default=False)
 
     def __str__(self):
         return self.name
@@ -23,18 +25,19 @@ class Country(models.Model):
     class Meta:
         verbose_name = "Страна"
         verbose_name_plural = "Страны"
-        ordering = ["name"]
+        ordering = ["-priority", "name"]
 
 
 class Airport(models.Model):
     name = models.CharField(verbose_name="Название", max_length=200, unique=True)
     iata_code = models.CharField(verbose_name="IATA", max_length=3, unique=True)
     icao_code = models.CharField(verbose_name="ICAO", max_length=4, unique=True)
-    lat = models.FloatField(verbose_name="Широта", unique=True)
-    lng = models.FloatField(verbose_name="Долгота", unique=True)
+    lat = models.FloatField(verbose_name="Широта")
+    lng = models.FloatField(verbose_name="Долгота")
     country = models.ForeignKey(Country, on_delete=models.CASCADE, verbose_name="Страна")
     logo = models.ImageField(verbose_name="Лого", upload_to='data/airport/',
-                      default='data/airport/no.jpg')
+                            default='data/airport/no.jpg')
+    priority = models.BooleanField(verbose_name="Приоритет", default=False)
 
     def __str__(self):
         return self.name
@@ -42,12 +45,13 @@ class Airport(models.Model):
     class Meta:
         verbose_name = "Аэропорт"
         verbose_name_plural = "Аэропорты"
-        ordering = ["name"]
+        ordering = ["-priority", "name"]
 
 
 class AircraftType(models.Model):
-    model = models.CharField(verbose_name="Название RU", max_length=200, unique=True)
+    model = models.CharField(verbose_name="Название", max_length=200, unique=True)
     icao_code = models.CharField(verbose_name="Код ICAO", max_length=4, unique=True)
+    priority = models.BooleanField(verbose_name="Приоритет", default=False)
 
     def __str__(self):
         return self.model
@@ -55,7 +59,7 @@ class AircraftType(models.Model):
     class Meta:
         verbose_name = "Тип самолета"
         verbose_name_plural = "Типы самолетов"
-        ordering = ["model"]
+        ordering = ["-priority", "model"]
 
 
 class Airline(models.Model):
@@ -64,6 +68,8 @@ class Airline(models.Model):
     icao_code = models.CharField(verbose_name="ICAO", max_length=3, unique=True)
     logo = models.ImageField(verbose_name="Лого", upload_to='data/airline/',
                       default='data/airline/no.jpg')
+    account = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="Пользователь")
+    priority = models.BooleanField(verbose_name="Приоритет", default=False)
 
     def __str__(self):
         return self.name
@@ -98,6 +104,7 @@ class Pilot(models.Model):
     patronymic = models.CharField(verbose_name="Отчество", max_length=50)
     sex = models.CharField(max_length=1, choices=choice_type_sex, verbose_name="Пол")
     type_pilot = models.CharField(max_length=1, choices=choice_type_pilot, default="C", verbose_name="Тип пилота")
+    airline = models.ForeignKey(Airline, on_delete=models.CASCADE, verbose_name="Авиакомпания")
     ratings = models.ManyToManyField(AircraftType, verbose_name="Квалификация")
     hub = models.ForeignKey(Airport, on_delete=models.CASCADE, verbose_name="Хаб")
     foto = models.ImageField(verbose_name="Фото", upload_to='data/person/',
@@ -105,9 +112,6 @@ class Pilot(models.Model):
 
     def __str__(self):
         return self.last_name
-
-    def get_ratings(self):
-        return "\n".join([p.products for p in self.product.all()])
 
     class Meta:
         verbose_name = "Пилот"
@@ -121,6 +125,7 @@ class Steward(models.Model):
     patronymic = models.CharField(verbose_name="Отчество", max_length=50)
     sex = models.CharField(max_length=1, choices=choice_type_sex, verbose_name="Пол")
     hub = models.ForeignKey(Airport, on_delete=models.CASCADE, verbose_name="Хаб")
+    airline = models.ForeignKey(Airline, on_delete=models.CASCADE, verbose_name="Авиакомпания")
     foto = models.ImageField(verbose_name="Фото", upload_to='data/person/',
                              default='data/person/no.jpg')
 
@@ -131,3 +136,5 @@ class Steward(models.Model):
         verbose_name = "Стюард"
         verbose_name_plural = "Стюарды"
         ordering = ["last_name", "first_name"]
+
+#todo: airline field for Pilot, Steward

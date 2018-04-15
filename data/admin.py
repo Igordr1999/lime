@@ -1,21 +1,20 @@
 from django.contrib import admin
-
 from data.models import Country, Airport, AircraftType, Aircraft, Airline, Pilot, Steward
 
 
 @admin.register(Country)
 class OfferAdmin(admin.ModelAdmin):
-    list_display = ['name']
+    list_display = ['name', 'priority']
 
 
 @admin.register(Airport)
 class OfferAdmin(admin.ModelAdmin):
-    list_display = ['name', 'iata_code', 'icao_code', 'lat', 'lng', 'country']
+    list_display = ['name', 'iata_code', 'icao_code', 'lat', 'lng', 'country', 'priority']
 
 
 @admin.register(AircraftType)
 class OfferAdmin(admin.ModelAdmin):
-    list_display = ['model', 'icao_code']
+    list_display = ['model', 'icao_code', 'priority']
 
 
 @admin.register(Airline)
@@ -35,5 +34,5 @@ class OfferAdmin(admin.ModelAdmin):
 
 @admin.register(Steward)
 class OfferAdmin(admin.ModelAdmin):
-    list_display = ['first_name', 'last_name', 'patronymic', 'sex']
+    list_display = ['last_name', 'first_name', 'patronymic', 'sex', 'hub']
     

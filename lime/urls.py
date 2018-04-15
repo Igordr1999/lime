@@ -20,8 +20,13 @@ from django.conf.urls.static import static
 from django.conf.urls import include
 
 from home import views as home_views
+from data import views as data_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home_views.home, name="home")
+    path('', home_views.home, name="home"),
+    path('auth/reg/', data_views.reg_profile, name="reg"),
+    path('auth/login/', data_views.login_profile, name="login"),
+    path('auth/logout/', data_views.logout_profile, name="logout"),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
