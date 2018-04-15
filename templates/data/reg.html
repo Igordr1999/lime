@@ -3,13 +3,43 @@
 {% load bootstrap4 %}
 
 {% block content %}
+<div class="uk-background-cover uk-padding" style="background-image: url({% static 'img/back1.jpg' %}); background-attachment: fixed; min-height:600px;">
+	<div class="uk-container">
+		<div class="uk-card uk-card-default uk-width-1-1@m uk-align-center uk-margin-top" id="login_card" style="width: 400px;">
+	    	<div class="uk-card-header">
+	        	<div uk-grid>
+	            	<div class="uk-width-auto">
+	                	<a href="{% url 'home' %}"><img width="135" height="45" src="{% static 'img/d_logo3.png' %}"></a>
+	            	</div>
+	            	<div class="uk-card-badge uk-label">Регистрация</div>
+	        	</div>
+	    	</div>
+	    	<div class="uk-card-body">
+				<form action="{% url 'reg' %}" method="post" class="form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% bootstrap_form user_form %}
+                    {% bootstrap_form airline_form %}
+                    {% buttons %}
+                        <button type="submit" class="btn btn-primary" style="width: 100%">Регистрация</button>
+                    {% endbuttons %}
+                </form>
 
-<form action="{% url 'reg' %}" method="post" class="form" enctype="multipart/form-data">
-    {% csrf_token %}
-    {% bootstrap_form user_form %}
-    {% bootstrap_form airline_form %}
-    {% buttons %}
-        <button type="submit" class="btn btn-primary">Submit</button>
-    {% endbuttons %}
-</form>
+				<div class="uk-margin">
+					<div class="uk-inline uk-align-left login_link">
+						<a href="#">Не могу войти</a>
+					</div>
+
+					<div class="uk-inline uk-align-right login_link">
+						<a href="{% url 'login' %}">Войти</a>
+					</div>
+				</div>
+
+	    	</div>
+	    	<div class="uk-card-footer uk-text-center">
+	        	<a href="{% url 'home' %}" class="uk-button uk-button-text">Вернуться на сайт</a>
+	    	</div>
+		</div>
+	</div>
+</div>
+
 {% endblock %}

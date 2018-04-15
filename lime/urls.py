@@ -25,8 +25,8 @@ from data import views as data_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_views.home, name="home"),
-    path('auth/reg/', data_views.reg_profile, name="reg"),
-    path('auth/login/', data_views.login_profile, name="login"),
-    path('auth/logout/', data_views.logout_profile, name="logout"),
+    path('reg/', data_views.reg_profile, name="reg"),
+    path('login/', data_views.login_profile, name="login"),
+    path('logout/', data_views.logout_profile, name="logout"),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

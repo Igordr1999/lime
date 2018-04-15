@@ -77,7 +77,7 @@ class Airline(models.Model):
     class Meta:
         verbose_name = "Авиакомпания"
         verbose_name_plural = "Авиакомпании"
-        ordering = ["name"]
+        ordering = ["-priority", "name"]
 
 
 class Aircraft(models.Model):
@@ -116,7 +116,7 @@ class Pilot(models.Model):
     class Meta:
         verbose_name = "Пилот"
         verbose_name_plural = "Пилоты"
-        ordering = ["last_name", "first_name"]
+        ordering = ["airline", "last_name", "first_name"]
 
 
 class Steward(models.Model):
@@ -137,4 +137,37 @@ class Steward(models.Model):
         verbose_name_plural = "Стюарды"
         ordering = ["last_name", "first_name"]
 
-#todo: airline field for Pilot, Steward
+
+class Route(models.Model):
+    number = models.IntegerField(verbose_name="Код")
+    from_airport = models.ForeignKey(Airport, on_delete=models.CASCADE, verbose_name="Откуда", related_name='f_a')
+    to_airport = models.ForeignKey(Airport, on_delete=models.CASCADE, verbose_name="Куда", related_name='t_a')
+    airline = models.ForeignKey(Airline, on_delete=models.CASCADE, verbose_name="Авикомпания")
+    days_of_week = models.CharField(verbose_name="Дни полета", max_length=7)
+    from_scheduled_time = models.TimeField(verbose_name="Плановое время вылета")
+    to_scheduled_time = models.TimeField(verbose_name="Плановое время прилета")
+    is_international = models.BooleanField(verbose_name="Международный", default=False)
+    is_regular = models.BooleanField(verbose_name="Регулярный", default=True)
+
+    def __str__(self):
+        return self.number
+
+    class Meta:
+        verbose_name = "Маршрут"
+        verbose_name_plural = "Маршруты"
+        ordering = ["airline", "number"]
+
+
+class Flight(models.Model):
+    route = models.ForeignKey(Route, on_delete=models.CASCADE, verbose_name="Маршрут")
+    from_datetime = models.DateTimeField(verbose_name="Время вылета")
+    to_datetime = models.DateTimeField(verbose_name="Время прилета")
+
+    def __str__(self):
+        s = self.route.number + " " + self.from_datetime + " " + self.to_datetime
+        return s
+
+    class Meta:
+        verbose_name = "Рейс"
+        verbose_name_plural = "Рейсы"
+        ordering = ["route"]

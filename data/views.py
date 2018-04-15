@@ -64,3 +64,5 @@ def reg_profile(request):
         else:
             return render(request, template, {"user_form": user_form,
                                               "airline_form": airline_form})
+
+
