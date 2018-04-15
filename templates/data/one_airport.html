@@ -1,0 +1,116 @@
+{% extends 'base_objects.html' %}
+{% load static %}
+{% load l10n %}
+
+{% block title %}Страна{% endblock %}
+
+{% block objects_content %}
+<div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
+    <div class="uk-card-media-left uk-cover-container">
+        <img src="{{ data.logo.url }}" alt="">
+        <canvas width="600" height="400"></canvas>
+    </div>
+    <div>
+        <div class="uk-card-body">
+            <h3 class="uk-card-title">{{ data.name }}</h3>
+            <ul>
+            <li>IATA код: {{ data.iata_code }}</li>
+            <li>ICAO код: {{ data.icao_code }}</li>
+            <li>Широта: {{ data.lat|unlocalize  }}</li>
+            <li>Долгота: {{ data.lng|unlocalize }}</li>
+            <li>Страна: {{ data.country }}</li>
+
+                <li>
+                    {% if data.priority == True %}
+                        Популярное направление
+                    {% else %}
+                        НЕпопулярное направление
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+    <style>
+        #map {
+            width: 100%; height: 500px; padding: 0; margin: 0;
+        }
+    </style>
+    <script type="text/javascript">
+        ymaps.ready(init);
+
+        function init () {
+ymaps.ready(init);
+
+function init() {
+    var myMap = new ymaps.Map("map", {
+            center: [{{ data.lat|unlocalize  }}, {{ data.lng|unlocalize }}],
+            zoom: 10
+        }, {
+            searchControlProvider: 'yandex#search'
+        }),
+
+    // Создаем геообъект с типом геометрии "Точка".
+        myGeoObject = new ymaps.GeoObject({
+            // Описание геометрии.
+            geometry: {
+                type: "Point",
+                coordinates: [{{ data.lat|unlocalize  }}, {{ data.lng|unlocalize }}]
+            },
+            // Свойства.
+            properties: {
+                // Контент метки.
+                iconContent: 'Я тащусь',
+                hintContent: 'Ну давай уже тащи'
+            }
+        }, {
+            // Опции.
+            // Иконка метки будет растягиваться под размер ее содержимого.
+            preset: 'islands#blackStretchyIcon',
+            // Метку можно перемещать.
+            draggable: true
+        }),
+        myPieChart = new ymaps.Placemark([
+            55.847, 37.6
+        ], {
+            // Данные для построения диаграммы.
+            data: [
+                {weight: 8, color: '#0E4779'},
+                {weight: 6, color: '#1E98FF'},
+                {weight: 4, color: '#82CDFF'}
+            ],
+            iconCaption: "Диаграмма"
+        }, {
+            // Зададим произвольный макет метки.
+            iconLayout: 'default#pieChart',
+            // Радиус диаграммы в пикселях.
+            iconPieChartRadius: 30,
+            // Радиус центральной части макета.
+            iconPieChartCoreRadius: 10,
+            // Стиль заливки центральной части.
+            iconPieChartCoreFillStyle: '#ffffff',
+            // Cтиль линий-разделителей секторов и внешней обводки диаграммы.
+            iconPieChartStrokeStyle: '#ffffff',
+            // Ширина линий-разделителей секторов и внешней обводки диаграммы.
+            iconPieChartStrokeWidth: 3,
+            // Максимальная ширина подписи метки.
+            iconPieChartCaptionMaxWidth: 200
+        });
+
+    myMap.geoObjects
+        .add(new ymaps.Placemark([{{ data.lat|unlocalize  }}, {{ data.lng|unlocalize }}], {
+            balloonContent: 'цвет <strong>носика Гены</strong>',
+            iconCaption: '{{ data.name }}'
+        }, {
+            preset: 'islands#greenDotIconWithCaption'
+        }))
+}
+
+        }
+    </script>
+    <hr>
+    <h2>Аэропорт на карте</h2>
+    <div id="map"></div>
+    <hr>
+
+{% endblock %}

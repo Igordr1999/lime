@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <nav class="uk-navbar-container" uk-navbar style="height: 50px;">
+    <div class="uk-navbar-left uk-navbar-center">
+
+        <ul class="uk-navbar-nav">
+            <li><a href="#">Все статьи</a></li>
+            <li><a href="#">Темы</a></li>
+        </ul>
+
+    </div>
+</nav>
+    <div class="uk-section uk-section-default uk-padding-remove-vertical">
+            <div class="uk-container">
+                <div uk-grid="" class="uk-grid uk-flex-center">
+                    <div class="{% block blog_width %}uk-width-1-1{% endblock %} uk-first-column">
+                        <h1 class="uk-title uk-text-center uk-text-primary uk-padding-remove-vertical">
+                            {% block blog_name_page %}{% endblock %}
+                        </h1>
+                        {% block blog_nav %}
+                            <ul class="uk-breadcrumb uk-padding uk-padding-remove-vertical">
+                                <li><a href="{% url 'home' %}">Lime</a></li>
+                                <li><a href="#">Данные</a></li>
+                            </ul>
+                        {% endblock %}
+
+                        {% block objects_content %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+    </div>
+{% endblock %}

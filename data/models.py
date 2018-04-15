@@ -1,10 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
+import datetime
 
 choice_type_pilot = (
     ("C", 'КВС'),
     ("S", 'Второй пилот'),
     ("E", 'Бортинженер'),
+)
+
+choice_type_status_flight = (
+    ("W", 'Ожидание'),
+    ("D", 'Вылетел'),
+    ("A", 'Прилетел'),
+    ("C", 'Отменен'),
 )
 
 choice_type_sex = (
@@ -85,7 +94,7 @@ class Aircraft(models.Model):
     model = models.ForeignKey(AircraftType, on_delete=models.CASCADE, verbose_name="Модель")
     airline = models.ForeignKey(Airline, on_delete=models.CASCADE, verbose_name="Владелец")
     hub = models.ForeignKey(Airport, on_delete=models.CASCADE, verbose_name="Хаб")
-    status = models.BooleanField(verbose_name="Активный ли?", default=True)
+    status = models.BooleanField(verbose_name="Активный", default=True)
     foto = models.ImageField(verbose_name="Фото", upload_to='data/aircraft/',
                              default='data/aircraft/no.jpg')
 
@@ -111,12 +120,13 @@ class Pilot(models.Model):
                              default='data/person/no.jpg')
 
     def __str__(self):
-        return self.last_name
+        s = "{} {} {} ({})".format(self.last_name, self.first_name, self.patronymic, self.type_pilot)
+        return s
 
     class Meta:
         verbose_name = "Пилот"
         verbose_name_plural = "Пилоты"
-        ordering = ["airline", "last_name", "first_name"]
+        ordering = ["type_pilot", "airline", "last_name", "first_name"]
 
 
 class Steward(models.Model):
@@ -130,7 +140,8 @@ class Steward(models.Model):
                              default='data/person/no.jpg')
 
     def __str__(self):
-        return self.last_name
+        s = "{} {} {}".format(self.last_name, self.first_name, self.patronymic)
+        return s
 
     class Meta:
         verbose_name = "Стюард"
@@ -158,14 +169,24 @@ class Route(models.Model):
         ordering = ["airline", "number"]
 
 
-class Flight(models.Model):
-    route = models.ForeignKey(Route, on_delete=models.CASCADE, verbose_name="Маршрут")
-    from_datetime = models.DateTimeField(verbose_name="Время вылета")
-    to_datetime = models.DateTimeField(verbose_name="Время прилета")
+class Crew(models.Model):
+    pic = models.ForeignKey(Pilot, on_delete=models.CASCADE, verbose_name="КВС", related_name="crew_p")
+    co_pilot = models.ForeignKey(Pilot, on_delete=models.CASCADE, verbose_name="Второй пилот", related_name="crew_c")
+    engineer = models.ForeignKey(Pilot, on_delete=models.CASCADE, verbose_name="Бортмеханик", related_name="crew_e")
+    steward = models.ManyToManyField(Steward, verbose_name="Бортпроводники")
 
-    def __str__(self):
-        s = self.route.number + " " + self.from_datetime + " " + self.to_datetime
-        return s
+    class Meta:
+        verbose_name = "Экипаж"
+        verbose_name_plural = "Экипажи"
+
+
+class FlightRoute(models.Model):
+    route = models.ForeignKey(Route, on_delete=models.CASCADE, verbose_name="Маршрут")
+    from_datetime = models.DateTimeField(verbose_name="Ориентировочное время вылета")
+    to_datetime = models.DateTimeField(verbose_name="Ориентировочное время прилета")
+    actual_from_datetime = models.DateTimeField(verbose_name="Ориентировочное время вылета")
+    actual_to_datetime = models.DateTimeField(verbose_name="Фактическое время прилета")
+    crew = models.ForeignKey(Crew, on_delete=models.CASCADE, verbose_name="Персонал")
 
     class Meta:
         verbose_name = "Рейс"

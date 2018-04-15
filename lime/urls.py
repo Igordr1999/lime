@@ -28,5 +28,13 @@ urlpatterns = [
     path('reg/', data_views.reg_profile, name="reg"),
     path('login/', data_views.login_profile, name="login"),
     path('logout/', data_views.logout_profile, name="logout"),
+
+    path('airports/', data_views.show_airports, name="airports"),
+    path('airlines/', data_views.show_airlines, name="airlines"),
+    path('countries/', data_views.show_countries, name="countries"),
+
+    path('country/<name>/', data_views.show_one_country, name="country"),
+    path('airline/<icao>/', data_views.show_one_airline, name="airline"),
+    path('airport/<iata>/', data_views.show_one_airport, name="airport"),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

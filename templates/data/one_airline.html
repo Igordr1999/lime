@@ -1,0 +1,32 @@
+{% extends 'base_objects.html' %}
+{% load static %}
+{% load l10n %}
+
+{% block title %}Страна{% endblock %}
+
+{% block objects_content %}
+<div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
+    <div class="uk-card-media-left uk-cover-container">
+        <img src="{{ data.logo.url }}" alt="">
+        <canvas width="600" height="400"></canvas>
+    </div>
+    <div>
+        <div class="uk-card-body">
+            <h3 class="uk-card-title">{{ data.name }}</h3>
+            <ul>
+            <li>IATA код: {{ data.iata_code }}</li>
+            <li>ICAO код: {{ data.icao_code }}</li>
+
+                <li>
+                    {% if data.priority == True %}
+                        Популярное направление
+                    {% else %}
+                        НЕпопулярное направление
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

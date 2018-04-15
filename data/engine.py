@@ -1637,3 +1637,14 @@ def generate_users():
         user.save()
 
 
+def generate_aircraft(code, model, airline="U6", hub="DME", status=True):
+    Aircraft.objects.create(
+        reg=code,
+        model=AircraftType.objects.get(icao_code=model),
+        airline=Airline_lime.objects.get(iata_code=airline),
+        hub=Airport_lime.objects.get(iata_code=hub),
+        status=status
+    )
+
+
+

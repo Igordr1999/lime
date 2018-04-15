@@ -1,0 +1,27 @@
+{% extends 'base_objects.html' %}
+{% load static %}
+
+{% block title %}Страна{% endblock %}
+
+{% block objects_content %}
+<div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
+    <div class="uk-card-media-left uk-cover-container">
+        <img src="{{ data.flag.url }}" alt="" style="max-height: 300px">
+        <canvas width="600" height="400"></canvas>
+    </div>
+    <div>
+        <div class="uk-card-body">
+            <h3 class="uk-card-title">{{ data.name }}</h3>
+            <ul>
+                <li>
+                    {% if data.priority == True %}
+                        Популярное направление
+                    {% else %}
+                        НЕпопулярное направление
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

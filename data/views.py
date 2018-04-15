@@ -4,6 +4,9 @@ from .forms import UserForm, AirlineForm
 from django.contrib.auth import login, logout, authenticate
 from django.shortcuts import redirect
 from django.contrib.auth.forms import AuthenticationForm
+from django.shortcuts import get_object_or_404
+
+from data.models import Country, Airport, AircraftType, Aircraft, Airline, Pilot, Steward
 
 
 def login_profile(request):
@@ -66,3 +69,37 @@ def reg_profile(request):
                                               "airline_form": airline_form})
 
 
+def show_airports(request):
+    d = Airport.objects.filter(priority=True)
+    template = 'data/airports.html'
+    return render(request, template, {'data': d})
+
+
+def show_airlines(request):
+    d = Airline.objects.filter(priority=True)
+    template = 'data/airlines.html'
+    return render(request, template, {'data': d})
+
+
+def show_countries(request):
+    d = Country.objects.filter(priority=True)
+    template = 'data/countries.html'
+    return render(request, template, {'data': d})
+
+
+def show_one_country(request, name):
+    d = get_object_or_404(Country, name=name)
+    template = 'data/one_country.html'
+    return render(request, template, {'data': d})
+
+
+def show_one_airline(request, icao):
+    d = get_object_or_404(Airline, icao_code=icao)
+    template = 'data/one_airline.html'
+    return render(request, template, {'data': d})
+
+
+def show_one_airport(request, iata):
+    d = get_object_or_404(Airport, iata_code=iata)
+    template = 'data/one_airport.html'
+    return render(request, template, {'data': d})

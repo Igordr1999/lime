@@ -1,0 +1,25 @@
+{% extends 'base_objects.html' %}
+{% load static %}
+
+{% block title %}Авиакомпании{% endblock %}
+
+{% block objects_content %}
+		<div class="uk-child-width-1-3@m uk-padding uk-grid" uk-grid class="uk-flex-center">
+            {% for d in data %}
+		    <div>
+		        <div class="uk-card uk-card-default">
+		            <div class="uk-card-media-top">
+		                <a href="{% url 'airline' d.icao_code %}"><img src="{{ d.logo.url }}" alt=""></a>
+		            </div>
+		            <div class="uk-card-body">
+		                <h3 class="uk-card-title"><a href="{% url 'airline' d.icao_code %}">{{ d.name }}</a></h3>
+                        <ul>
+                            <li>IATA: {{ d.iata_code }}</li>
+                            <li>ICAO: {{ d.icao_code }}</li>
+                        </ul>
+		            </div>
+		        </div>
+		    </div>
+            {% endfor %}
+		</div>
+{% endblock %}

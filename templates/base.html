@@ -23,6 +23,8 @@
         <!-- Lime -->
         <link rel="stylesheet" href="{% static 'css/main.css' %}">
         <script src="{% static 'js/main.js' %}"></script>
+
+        <script src="//api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
     {% endblock %}
 </head>
 <body>
@@ -41,11 +43,9 @@
                                 <div>
                                     <ul class="uk-nav uk-navbar-dropdown-nav">
                                         <li class="uk-active uk-nav-header"><a href="#">Основные данные</a></li>
-                                        <li><a href="#">Страны</a></li>
-                                        <li><a href="#">Аэропорты</a></li>
-                                        <li><a href="#">Самолёты</a></li>
-                                        <li><a href="#">Пилоты</a></li>
-                                        <li><a href="#">Бортпроводники</a></li>
+                                        <li><a href="{% url 'countries' %}">Страны</a></li>
+                                        <li><a href="{% url 'airports' %}">Аэропорты</a></li>
+                                        <li><a href="{% url 'airlines' %}">Авиакомпании</a></li>
                                     </ul>
                                 </div>
                                 <div>

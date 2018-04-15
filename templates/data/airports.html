@@ -1,0 +1,22 @@
+{% extends 'base_objects.html' %}
+{% load static %}
+
+{% block title %}Аэропорты{% endblock %}
+
+{% block objects_content %}
+		<div class="uk-child-width-1-3@m uk-padding uk-grid" uk-grid class="uk-flex-center">
+            {% for d in data %}
+		    <div>
+		        <div class="uk-card uk-card-default">
+		            <div class="uk-card-media-top">
+		                <a href="{% url 'airport' d.iata_code %}"><img src="{{ d.logo.url }}" alt=""></a>
+		            </div>
+		            <div class="uk-card-body">
+		                <h3 class="uk-card-title"><a href="{% url 'airport' d.iata_code %}">{{ d.name }}</a></h3>
+		                <p>{{ d.country.name }}</p>
+		            </div>
+		        </div>
+		    </div>
+            {% endfor %}
+        </div>
+{% endblock %}
