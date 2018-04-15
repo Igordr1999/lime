@@ -118,6 +118,7 @@ class Pilot(models.Model):
     hub = models.ForeignKey(Airport, on_delete=models.CASCADE, verbose_name="Хаб")
     foto = models.ImageField(verbose_name="Фото", upload_to='data/person/',
                              default='data/person/no.jpg')
+    active = models.BooleanField(verbose_name="Активный", default=True)
 
     def __str__(self):
         s = "{} {} {} ({})".format(self.last_name, self.first_name, self.patronymic, self.type_pilot)
@@ -161,7 +162,8 @@ class Route(models.Model):
     is_regular = models.BooleanField(verbose_name="Регулярный", default=True)
 
     def __str__(self):
-        return self.number
+        s = str(self.number)
+        return s
 
     class Meta:
         verbose_name = "Маршрут"
@@ -175,20 +177,26 @@ class Crew(models.Model):
     engineer = models.ForeignKey(Pilot, on_delete=models.CASCADE, verbose_name="Бортмеханик", related_name="crew_e")
     steward = models.ManyToManyField(Steward, verbose_name="Бортпроводники")
 
+    def __str__(self):
+        s = "КВС: {} {} {}".format(self.pic.last_name, self.pic.first_name, self.pic.patronymic)
+        return s
+
     class Meta:
         verbose_name = "Экипаж"
         verbose_name_plural = "Экипажи"
 
 
-class FlightRoute(models.Model):
+class FlightRouteLime(models.Model):
     route = models.ForeignKey(Route, on_delete=models.CASCADE, verbose_name="Маршрут")
     from_datetime = models.DateTimeField(verbose_name="Ориентировочное время вылета")
     to_datetime = models.DateTimeField(verbose_name="Ориентировочное время прилета")
-    actual_from_datetime = models.DateTimeField(verbose_name="Ориентировочное время вылета")
+    actual_from_datetime = models.DateTimeField(verbose_name="Фактическое время вылета")
     actual_to_datetime = models.DateTimeField(verbose_name="Фактическое время прилета")
     crew = models.ForeignKey(Crew, on_delete=models.CASCADE, verbose_name="Персонал")
+    aircraft = models.ForeignKey(Aircraft, on_delete=models.CASCADE, verbose_name="Самолет")
 
     class Meta:
         verbose_name = "Рейс"
         verbose_name_plural = "Рейсы"
         ordering = ["route"]
+

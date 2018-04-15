@@ -1,5 +1,5 @@
 from django.contrib import admin
-from data.models import Country, Airport, AircraftType, Aircraft, Airline, Pilot, Steward, Route, FlightRoute, Crew
+from data.models import Country, Airport, AircraftType, Aircraft, Airline, Pilot, Steward, Route, Crew, FlightRouteLime
 
 
 @admin.register(Country)
@@ -39,12 +39,14 @@ class OfferAdmin(admin.ModelAdmin):
 
 @admin.register(Route)
 class OfferAdmin(admin.ModelAdmin):
-    list_display = ['number', 'from_airport', 'to_airport', 'airline', 'days_of_week', 'is_international', 'is_regular']
+    list_display = ['number', 'from_airport', 'to_airport', 'airline', 'days_of_week', 'is_international', 'is_regular',
+                    'from_scheduled_time', 'to_scheduled_time'
+                    ]
 
 
-@admin.register(FlightRoute)
+@admin.register(FlightRouteLime)
 class OfferAdmin(admin.ModelAdmin):
-    list_display = ["route", "from_datetime", "to_datetime"]
+    list_display = ["route", "from_datetime", "to_datetime", "crew", "aircraft"]
 
 
 @admin.register(Crew)
